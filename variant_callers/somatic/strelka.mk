@@ -29,6 +29,8 @@ strelka/$1_$2/Makefile : bam/$1.bam bam/$2.bam
 
 strelka/$1_$2/results/all.somatic.indels.vcf : strelka/$1_$2/Makefile
 	$$(call RUN,$$(STRELKA_NUM_CORES),$$(RESOURCE_REQ_LOW_MEM),$$(RESOURCE_REQ_SHORT),,"\
+	sed -i '/HLA\-/d' $$(<D)/Makefile &&\
+	sed -E -i -e 's/(\tHLA\-[^\t]+)+//g' -e '/^chrom_HLA\-/d'  $$(<D)/config/run.config.ini &&\
 	make -j $$(STRELKA_NUM_CORES) -C $$(<D)")
 
 strelka/$1_$2/results/all.somatic.snvs.vcf : strelka/$1_$2/results/all.somatic.indels.vcf
